@@ -19,9 +19,49 @@ const port = process.env.PORT || config.dev.port
 const autoOpenBrowser = !!config.dev.autoOpenBrowser
 // Define HTTP proxies to your custom API backend
 // https://github.com/chimurai/http-proxy-middleware
-const proxyTable = config.dev.proxyTable
+const proxyTable = config.dev.proxyTable;
 
-const app = express()
+const app = express();
+
+// // 定义数据读取
+var appData = require("../data.json");
+//  商家数据
+var seller = appData.seller;
+//  商品数据
+var goods = appData.goods;
+//  评论数据
+var ratings = appData.ratings;
+
+//  定义路由 ——接口
+var apiRoutes = express.Router();
+
+apiRoutes.get('/seller', function (req, res) {
+  res.json({
+    errno: 0,
+    data: seller
+  });
+});
+apiRoutes.get('/goods', function (req, res) {
+  res.json({
+    errno: 0,
+    data: goods
+  });
+});
+apiRoutes.get('/ratings', function (req, res) {
+  res.json({
+    errno: 0,
+    data: ratings
+  });
+});
+
+// 调用接口
+app.use('/api',apiRoutes);
+
+
+
+
+
+
 const compiler = webpack(webpackConfig)
 
 const devMiddleware = require('webpack-dev-middleware')(compiler, {
