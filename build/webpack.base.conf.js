@@ -22,7 +22,10 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
+      // 修改路径
       '@': resolve('src'),
+      'components': resolve('src/components'),
+      'router': resolve('src/router'),
     }
   },
   module: {
