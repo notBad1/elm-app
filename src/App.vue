@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <Header></Header>
+    <v-header></v-header>
     <div class="tab">
-      <router-link to="/goods" class="tab-item">商品</router-link>
-      <router-link to="/ratings" class="tab-item">评价</router-link>
-      <router-link to="/seller" class="tab-item">商家</router-link>
+      <div class="tab-item"><router-link to="/ratings">商品</router-link></div>
+      <div class="tab-item"><router-link to="/ratings">评价</router-link></div>
+      <div class="tab-item"><router-link to="/ratings">商家</router-link></div>
     </div>
     <router-view></router-view>
   </div>
@@ -12,9 +12,10 @@
 
 <script>
   import Header from './components/header/header.vue';
+
   export default {
     components: {
-      Header: Header
+      'v-header': Header
     }
   };
 </script>
