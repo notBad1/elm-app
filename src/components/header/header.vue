@@ -11,9 +11,12 @@
         </div>
         <div class="description">{{seller.description}}/{{seller.deliveryTime}}分钟送达</div>
         <div v-if="seller.supports" class="supports">
-          <span class="icon"></span>
+          <span class="icon" :class="classMap[seller.supports[0].type]"></span>
           <span class="text">{{seller.supports[0].description}}</span>
-          <span class="number">{{seller.supports.length}}个 <i class="icon-keyboard_arrow_righ"></i></span>
+          <div class="supports-count">
+            <span class="count">{{seller.supports.length}}个</span>
+            <i class="icon-keyboard_arrow_right"></i>
+          </div>
         </div>
       </div>
     </div>
@@ -27,12 +30,14 @@
       seller: {
         type: Object
       }
+    },
+    created () {
+      this.classMap = ['decrease', 'discount', 'guarantee', 'invoice', 'special'];
     }
   };
 </script>
 
 <style lang="stylus">
-
   @import "../../common/stylus/base.styl"
   @import "../../common/stylus/mixin.styl"
 
@@ -46,6 +51,7 @@
         width: 64px
         height: 64px
       .content
+        flex: 1
         padding: 2px 0
         margin-left: 16px
         .title
@@ -56,7 +62,7 @@
             width: 30px
             height: 18px
             bg-image('brand')
-            background-size : 30px 18px
+            background-size: 30px 18px
             background-repeat: no-repeat
           .name
             margin-left: 6px
@@ -67,7 +73,40 @@
           margin-bottom: 10px
           line-height: 12px
           font-size: 12px
-          font-weight: 200
-        /*.supports*/
+        .supports
+          position relative
+          .icon
+            display: inline-block
+            vertical-align: top
+            width: 12px
+            height: 12px
+            background-size: 12px
+            background-repeat: no-repeat
+            &.decrease
+              bg-image('decrease_1')
+            &.discount
+              bg-image('discount_1')
+            &.guarantee
+              bg-image('guarantee_1')
+            &.invoice
+              bg-image('invoice_1')
+            &.special
+              bg-image('special_1')
+          .text
+            margin-left: 4px
+            line-height: 12px
+            vertical-align: top
+            font-size: 10px
+            font-weight: 200
+          .supports-count
+            position: absolute
+            top: 0
+            right: 0
+            padding: 7px 8px
+            background: rgba(0, 0, 0, .2)
+            .count
+              line-height: 12px
+              font-size: 10px
+              font-weight: 200
 
 </style>
