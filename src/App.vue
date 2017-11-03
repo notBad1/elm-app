@@ -45,8 +45,9 @@
   };
 </script>
 
-<style lang="stylus">
+<style scoped lang="stylus" rel="stylesheet/stylus">
   @import "./common/stylus/mixin.styl"
+
   #app
     .tab
       display: flex

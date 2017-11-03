@@ -37,13 +37,14 @@
   };
 </script>
 
-<style lang="stylus">
+<style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/base.styl"
   @import "../../common/stylus/mixin.styl"
+  @import "../../common/stylus/icon.css"
 
   .header
     color: #fff
-    background: #000
+    background: #999
     .content-wrapper
       display: flex
       padding: 24px 12px 18px 24px
@@ -100,13 +101,18 @@
             font-weight: 200
           .supports-count
             position: absolute
-            top: 0
+            top: -5px
             right: 0
-            padding: 7px 8px
-            background: rgba(0, 0, 0, .2)
+            padding: 0 8px
+            display: flex
+            justify-content: center
+            align-items: center
+            height: 24px
+            border-radius: 14px
+            background-color: rgba(0, 0, 0, .2)
             .count
-              line-height: 12px
               font-size: 10px
-              font-weight: 200
+            .icon-keyboard_arrow_right
+              font-size: 10px
 
 </style>
