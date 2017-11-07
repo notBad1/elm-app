@@ -35,24 +35,55 @@
            公告弹出浮层———— CSS Sticky footer 布局
           如果页面内容不够长的时候，页脚块粘贴在视窗底部；如果内容足够长时，页脚块会被内容向下推送
      -->
-    <div class="detail" v-show="detailShow">
-      <div class="detail-wrapper clearfix">
-        <div class="detail-main">
-          <p>{{seller.bulletin}}</p>
-          <p>{{seller.bulletin}}</p>
-          <p>{{seller.bulletin}}</p>
+    <transition name="fade">
+      <div class="detail" v-show="detailShow">
+        <div class="detail-wrapper clearfix">
+          <div class="detail-main">
+            <!--公告内容-->
+            <h1 class="name">{{seller.name}}</h1>
+            <!--星星-->
+            <div class="star-wrapper">
+              <v-star :size="48" :score="seller.score"></v-star>
+            </div>
+            <!--标题-->
+            <div class="title">
+              <div class="line"></div>
+              <div class="text">优惠信息</div>
+              <div class="line"></div>
+            </div>
+            <ul v-if="seller.supports" class="supports">
+              <li v-for="item in seller.supports" class="support-item">
+                <span class="icon" :class="classMap[item.type]"></span>
+                <span class="text">{{item.description}}</span>
+              </li>
+            </ul>
+            <!--标题-->
+            <div class="title">
+              <div class="line"></div>
+              <div class="text">商家公告</div>
+              <div class="line"></div>
+            </div>
+            <div class="bulletin">
+              <p class="content">{{seller.bulletin}}</p>
+            </div>
+          </div>
+        </div>
+        <!--页面底部——关闭按钮-->
+        <div class="detail-close">
+          <i class="icon-close" @click="hideDetail"></i>
         </div>
       </div>
-      <!--页面底部——关闭按钮-->
-      <div class="detail-close">
-        <i class="icon-close" @click="hideDetail"></i>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 
 <script>
+  import star from 'components/star/star.vue';
+
   export default{
+    components: {
+      'v-star': star
+    },
     props: {
       seller: {
         type: Object
@@ -99,6 +130,7 @@
         margin-left: 16px
         .title
           margin-bottom: 8px;
+          line-height: 18px
           .brand
             display: inline-block
             vertical-align: top
@@ -108,8 +140,8 @@
             background-size: 30px 18px
             background-repeat: no-repeat
           .name
+            vertical-align: top
             margin-left: 6px
-            line-height: 18px
             font-size: 16px
             font-weight: 900
         .description
@@ -118,6 +150,7 @@
           font-size: 12px
         .supports
           position relative
+          line-height: 12px
           .icon
             display: inline-block
             vertical-align: top
@@ -137,7 +170,6 @@
               bg-image('special_1')
           .text
             margin-left: 4px
-            line-height: 12px
             vertical-align: top
             font-size: 10px
             font-weight: 200
@@ -197,10 +229,72 @@
       overflow: auto
       background-color: rgba(7, 17, 27, .8)
       .detail-wrapper
+        width: 100%
         min-height: 100%
         .detail-main
-          margin-top: 64px;
+          margin-top: 64px
           padding-bottom: 64px
+          .name
+            line-height: 16px
+            text-align center
+            font-size: 16px
+            font-weight: 700
+          .star-wrapper
+            margin-top: 16px
+            margin-bottom : 28px
+            text-align center
+          .title
+            display: flex
+            width: 80%
+            margin: 28px auto 24px auto
+            .line
+              flex: 1
+              position: relative
+              top: -9px
+              border-bottom: 1px solid rgba(225,225,225, .2)
+            .text
+              padding: 0 12px
+              font-size: 14px
+              font-weight: 700
+          .supports
+            width: 80%
+            margin: 0 auto
+            .support-item
+              padding: 0 12px
+              margin-bottom: 12px
+              line-height: 16px
+              &:last-child
+                margin-bottom: 0
+              .icon
+                display: inline-block
+                width: 16px
+                height: 16px
+                vertical-align: top
+                margin-right: 6px
+                background-repeat: no-repeat
+                background-size: 16px
+                &.decrease
+                  bg-image("decrease_2")
+                &.discount
+                  bg-image("discount_2")
+                &.guarantee
+                  bg-image("guarantee_2")
+                &.invoice
+                  bg-image("invoice_2")
+                &.special
+                  bg-image("special_2")
+              .text
+                vertical-align: top
+                font-size: 12px
+                font-weight: 200
+          .bulletin
+            width: 80%
+            margin: 0 auto
+            padding 0 12px
+            line-height: 24px
+            .content
+              font-size: 12px
+            font-weight: 200
       .detail-close
         position: relative
         width: 32px
@@ -208,4 +302,9 @@
         margin: -64px auto 0 auto
         clear: both
         font-size: 32px
+    .fade-enter-active, .fade-leave-active
+      transition: opacity 1s
+    .fade-enter, .fade-leave-to
+      opacity: 0
+
 </style>

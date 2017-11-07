@@ -17,7 +17,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Header from 'components/header/header.vue';
+  import header from 'components/header/header.vue';
 
   import Vue from 'vue';
   import axios from 'axios';
@@ -40,7 +40,7 @@
         });
     },
     components: {
-      'v-header': Header
+      'v-header': header
     }
   };
 </script>
