@@ -55,6 +55,7 @@
       height 40px
       line-height: 40px
       border-1px(rgba(7, 17, 27, .1))
+      background-color: #fff
       .tab-item
         flex: 1
         text-align: center
