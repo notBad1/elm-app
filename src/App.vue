@@ -26,21 +26,33 @@
   const ERR_OK = 0;
 
   export default {
-    data () {
-      return {
-        seller: {}
-      };
-    },
     created () {
       axios.get('api/seller')
         .then((res) => {
           if (res.data.errno === ERR_OK) {
-            this.seller = res.data.data;
+            this.$store.state.Seller.seller = res.data.data;
+          }
+        });
+      axios.get('api/goods')
+        .then((res) => {
+          if (res.data.errno === ERR_OK) {
+            this.$store.state.Goods.goods = res.data.data;
+          }
+        });
+      axios.get('api/ratings')
+        .then((res) => {
+          if (res.data.errno === ERR_OK) {
+            this.$store.state.Ratings.ratings = res.data.data;
           }
         });
     },
     components: {
       'v-header': header
+    },
+    computed: {
+      seller () {
+        return this.$store.state.Seller.seller;
+      }
     }
   };
 </script>

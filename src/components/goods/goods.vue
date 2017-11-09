@@ -6,13 +6,13 @@
 </template>
 <script type="text/ecmascript-6">
   export default{
-    props: {
-      seller: {
-        type: Object
+    computed: {
+      seller () {
+        return this.$store.state.Seller.seller;
+      },
+      goods () {
+        return this.$store.state.Goods.goods;
       }
-    },
-    created () {
-      console.log(this.seller);
     }
   };
 </script>
