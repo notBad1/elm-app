@@ -1,5 +1,5 @@
 <template>
-  <span class="icon" :class="[iconSize, classMap[type]+'-'+ color + '-'+ size]"></span>
+  <span class="icon" :class="[iconSize, classMap[type]+'-'+ color + '-'+ size]"> </span>
 </template>
 <script>
   export default{
