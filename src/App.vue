@@ -33,12 +33,6 @@
             this.$store.state.Seller.seller = res.data.data;
           }
         });
-      axios.get('api/goods')
-        .then((res) => {
-          if (res.data.errno === ERR_OK) {
-            this.$store.state.Goods.goods = res.data.data;
-          }
-        });
       axios.get('api/ratings')
         .then((res) => {
           if (res.data.errno === ERR_OK) {
