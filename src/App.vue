@@ -12,7 +12,7 @@
         <router-link to="/seller">商家</router-link>
       </div>
     </div>
-    <router-view></router-view>
+    <router-view :seller="seller"></router-view>
   </div>
 </template>
 
@@ -26,27 +26,21 @@
   const ERR_OK = 0;
 
   export default {
+    data () {
+      return {
+        seller: {}
+      };
+    },
     created () {
       axios.get('api/seller')
         .then((res) => {
           if (res.data.errno === ERR_OK) {
-            this.$store.state.Seller.seller = res.data.data;
-          }
-        });
-      axios.get('api/ratings')
-        .then((res) => {
-          if (res.data.errno === ERR_OK) {
-            this.$store.state.Ratings.ratings = res.data.data;
+            this.seller = res.data.data;
           }
         });
     },
     components: {
       'v-header': header
-    },
-    computed: {
-      seller () {
-        return this.$store.state.Seller.seller;
-      }
     }
   };
 </script>

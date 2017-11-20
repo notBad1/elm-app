@@ -50,21 +50,23 @@
   const ERR_OK = 0;
 
   export default{
+    props: {
+      seller: {
+        type: Object  // 商家数据
+      }
+    },
     data () {
       return {
-        goods: [],
-        listHeight: [],
-        scrollY: 0
+        goods: [], //  商品数据
+        listHeight: [], // 右侧区块到顶部高度的数组
+        scrollY: 0  // 滚动的高度
       };
     },
     components: {
       'v-icon': icon,
-      'v-shopCart': shopCart
+      'v-shopCart': shopCart // 底部购物车
     },
     computed: {
-      seller () {
-        return this.$store.state.Seller.seller;
-      },
       currentIndex () {
         for (let i = 0; i < this.listHeight.length; i++) {
           let height1 = this.listHeight[i];
@@ -77,6 +79,7 @@
       }
     },
     methods: {
+//      使用better-scroll 初始化左侧菜单和右侧列表
       _initScroll () {
         this.menuScroll = new BScroll(this.$refs.menu_wrapper, {
           click: true // 是否派发click事件
@@ -89,6 +92,7 @@
           this.scrollY = Math.abs(Math.round(pos.y));// 取整数 取绝对值、正值；
         });
       },
+//      计算右侧列表没一区块距离顶部的距离,并把他们组成一个数组
       _calculateHeight () {
         let foodList = this.$refs.foods_wrapper.getElementsByClassName('food-list-hook');
         let height = 0;

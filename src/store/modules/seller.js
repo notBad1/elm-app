@@ -4,7 +4,7 @@
 
 // state 状态
 const state = {
-  seller: {}
+  // seller: {}
 };
 
 export default {
