@@ -15,6 +15,13 @@
         <div class="pay" :class="{'highlight': highlight}"> {{payDesc}} </div>
       </div>
     </div>
+    <div class="ball-container">
+      <transition-group name="move" tag="div">
+        <div v-for="(ball, i) in balls" class="ball" v-show="ball.show" :key="i">
+          <span class="inner">1</span>
+        </div>
+      </transition-group>
+    </div>
   </div>
 </template>
 
@@ -22,7 +29,24 @@
   export default{
     data () {
       return {
-        highlight: false
+        highlight: false,
+        balls: [
+          {
+            show: false
+          },
+          {
+            show: false
+          },
+          {
+            show: false
+          },
+          {
+            show: false
+          },
+          {
+            show: false
+          }
+        ]
       };
     },
     props: {
@@ -37,20 +61,7 @@
       selectFoods: {  // 选中商品的数组
         type: Array,
         default () {
-          return [
-            {
-              price: 2,
-              count: 1
-            },
-            {
-              price: 12,
-              count: 2
-            },
-            {
-              price: 12,
-              count: 2
-            }
-          ];
+          return [];
         }
       }
     },
@@ -161,4 +172,26 @@
           &.highlight
             background-color: #00b43c
             color: #fff
+    .ball-container
+      .ball
+        position: fixed
+        left: 32px
+        bottom: 20px
+        z-index: 200
+        .inner
+          display: block
+          width: 16px
+          height: 16px
+          line-height: 16px
+          text-align: center
+          border-radius: 50%
+          background-color: rgb(0, 160, 220)
+          color: #fff
+          font-size: 10px
+      &.move-enter
+        transition: all .4s
+
+  /*&.move-enter-active*/
+  /*transform */
+
 </style>

@@ -27,6 +27,9 @@
                 <div class="price">
                   <span class="now">￥{{food.price}}</span>
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
+                  <div class=cartControl-wrapper>
+                    <v-cartControl :food="food"></v-cartControl>
+                  </div>
                 </div>
               </div>
             </li>
@@ -35,12 +38,13 @@
       </ul>
     </div>
 
-    <v-shopCart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></v-shopCart>
+    <v-shopCart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :selectFoods="selectFoods"></v-shopCart>
   </div>
 </template>
 <script type="text/ecmascript-6">
   import icon from 'components/icon/icon.vue';
   import shopCart from 'components/shopCart/shopCart.vue';
+  import cartControl from 'components/cartControl/cartControl.vue';
   import BScroll from 'better-scroll';
 
   import Vue from 'vue';
@@ -64,7 +68,8 @@
     },
     components: {
       'v-icon': icon,
-      'v-shopCart': shopCart // 底部购物车
+      'v-shopCart': shopCart, // 底部购物车
+      'v-cartControl': cartControl
     },
     computed: {
       currentIndex () {
@@ -76,6 +81,17 @@
           }
         }
         return 0;
+      },
+      selectFoods () {
+        let foods = [];
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count > 0) {
+              foods.push(food);
+            }
+          });
+        });
+        return foods;
       }
     },
     methods: {
@@ -85,7 +101,8 @@
           click: true // 是否派发click事件
         });
         this.foodsScroll = new BScroll(this.$refs.foods_wrapper, {
-          probeType: 3 // 监测实时滚动的位置
+          probeType: 3, // 监测实时滚动的位置
+          click: true
         });
         // 监测实时滚动的位置
         this.foodsScroll.on('scroll', (pos) => {
@@ -212,4 +229,8 @@
               color: rgb(147, 153, 159)
               font-weight: 400
               text-decoration: line-through
+            .cartControl-wrapper
+              position: absolute
+              bottom: 12px
+              right: 0
 </style>
