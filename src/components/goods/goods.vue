@@ -28,7 +28,7 @@
                   <span class="now">￥{{food.price}}</span>
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                   <div class=cartControl-wrapper>
-                    <v-cartControl :food="food"></v-cartControl>
+                    <v-cartControl :food="food" @target="drop"></v-cartControl>
                   </div>
                 </div>
               </div>
@@ -38,7 +38,8 @@
       </ul>
     </div>
 
-    <v-shopCart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :selectFoods="selectFoods"></v-shopCart>
+    <v-shopCart ref="shopCart" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"
+                :selectFoods="selectFoods"></v-shopCart>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -131,6 +132,10 @@
 //        滚动到某个位置
         this.foodsScroll.scrollTo(0, -height);
         this.scrollY = height;
+      },
+//      子组件事件触发
+      drop (target) {
+        this.$refs.shopCart.drop(target);
       }
     },
     created: function () {
