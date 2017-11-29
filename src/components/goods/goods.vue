@@ -40,12 +40,15 @@
 
     <v-shopCart ref="shopCart" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"
                 :selectFoods="selectFoods"></v-shopCart>
+
+    <v-food :food="food"></v-food>
   </div>
 </template>
 <script type="text/ecmascript-6">
   import icon from 'components/icon/icon.vue';
   import shopCart from 'components/shopCart/shopCart.vue';
   import cartControl from 'components/cartControl/cartControl.vue';
+  import food from 'components/food/food.vue';
   import BScroll from 'better-scroll';
 
   import Vue from 'vue';
@@ -70,7 +73,8 @@
     components: {
       'v-icon': icon,
       'v-shopCart': shopCart, // 底部购物车
-      'v-cartControl': cartControl
+      'v-cartControl': cartControl,
+      'v-food': food
     },
     computed: {
       currentIndex () {

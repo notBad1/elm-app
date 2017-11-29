@@ -1,6 +1,6 @@
 <template>
   <div class="shopCart">
-    <div class="content">
+    <div class="content" @click="toggleList">
       <div class="content-left">
         <div class="logo-wrapper">
           <div class="logo" :class="{'logo-highlight': totalCount}">
@@ -24,10 +24,37 @@
         </transition>
       </template>
     </div>
+    <transition name="fold">
+      <div class="shopCart-list" v-show="listShow">
+        <div class="list-header">
+          <h1 class="title">购物车</h1>
+          <span class="empty" @click="emptyList">清空</span>
+        </div>
+        <div class="list-content" ref="foodList">
+          <ul>
+            <li class="food" v-for="food in selectFoods">
+              <span class="name">{{food.name}}</span>
+              <div class="price">
+                ￥<span>{{food.price * food.count}}</span>
+              </div>
+              <div class="cartControl-wrapper">
+                <v-cartControl :food="food"></v-cartControl>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </transition>
+    <transition name="fade">
+      <div class="mask" v-show="listShow" @click="hideList"></div>
+    </transition>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import cartControl from 'components/cartControl/cartControl.vue';
+  import BScroll from 'better-scroll';
+
   export default{
     data () {
       return {
@@ -49,7 +76,8 @@
             show: false
           }
         ],
-        dropBalls: []
+        dropBalls: [],
+        fold: true // 折叠
       };
     },
     props: {
@@ -94,6 +122,26 @@
           this.highlight = true;
           return '去结算';
         }
+      },
+      listShow () {
+        if (!this.totalCount) {
+          this.fold = true;
+          return false;
+        }
+        let show = !this.fold;
+        if (show) {
+          this.$nextTick(() => {
+            if (!this.scroll) {
+              this.scroll = new BScroll(this.$refs.foodList, {
+                click: true
+              });
+            } else {
+              // 重新计算better-scroll高度
+              this.scroll.refresh();
+            }
+          });
+        }
+        return show;
       }
     },
     methods: {
@@ -149,12 +197,30 @@
           ball.show = false;
           el.style.display = 'none';
         }
+      },
+      toggleList () {
+        if (!this.totalCount) {
+          return;
+        }
+        this.fold = !this.fold;
+      },
+      hideList () {
+        this.fold = true;
+      },
+      emptyList () {
+        this.selectFoods.forEach((food) => {
+          food.count = 0;
+        });
       }
+    },
+    components: {
+      'v-cartControl': cartControl
     }
   };
 </script>
 
 <style lang="stylus">
+  @import "../../common/stylus/mixin.styl"
   @import "../../common/stylus/icon.css"
   .shopCart
     position: fixed
@@ -164,6 +230,8 @@
     width: 100%
     height: 46px
     .content
+      position: relative
+      z-index: 50
       display: flex
       background-color: #141d27
       color: rgba(225, 225, 225, .4)
@@ -251,5 +319,70 @@
           background-color: rgb(0, 160, 220)
           color: #fff
           font-size: 10px
+
+    .shopCart-list
+      position: absolute
+      left: 0
+      top: 0
+      z-index: 40
+      width: 100%
+      transform: translate3d(0, -100%, 0)
+      background-color: #fff
+      &.fold-enter-active, &.fold-leave-active
+        transition: all .5s
+      &.fold-enter, &.fold-leave-to
+        transform: translate3d(0, 0, 0)
+      .list-header
+        display: flex
+        height: 40px
+        line-height: 40px
+        padding: 0 18px
+        border-1px(rgba(7, 17, 27, .1))
+        background-color: #f3f5f7
+        .title
+          flex: 1
+          font-size: 14px
+          font-weight: 200
+          color: rgb(7, 17, 27)
+        .empty
+          font-size: 12px
+          color: rgb(0, 160, 220)
+      .list-content
+        padding: 0 18px
+        padding-bottom: 20px
+        max-height: 217px
+        overflow: hidden
+        ul
+          .food
+            display: flex
+            align-items: center
+            height: 48px
+            border-1px(rgba(7, 17, 27, .1))
+            .name
+              flex: 1
+              display: inline-block
+              font-size: 14px
+              color: rgb(7, 17, 27)
+            .price
+              margin-left: 18px
+              margin-right: 12px
+              font-size: 10px
+              color: rgb(240, 20, 20)
+              span
+                font-size: 14px
+                font-weight: 700
+    .mask
+      position: fixed
+      top: 0
+      left: 0
+      width: 100%
+      height: 100%
+      z-index: 30
+      background: rgba(7, 17, 27, .6)
+      &.fade-enter-active, &.fade-leave-active
+        transition: all .5s
+        opacity: 1
+      &.fade-enter, &.fade-leave-to
+        opacity: 0
 
 </style>
