@@ -15,9 +15,10 @@
           <div class="price">
             <span class="now">￥{{food.price}}</span>
             <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
-            <!--<div class=cartControl-wrapper>-->
-            <!--<v-cartControl :food="food" @target="drop"></v-cartControl>-->
-            <!--</div>-->
+            <div class='cartControl-wrapper'>
+              <div class="btn" v-show="!food.count" @click="addCart">加入购物车</div>
+              <v-cartControl ref="cartControl" v-show="food.count" :food="food" @target="drop"></v-cartControl>
+            </div>
           </div>
         </div>
         <v-split></v-split>
@@ -28,12 +29,14 @@
         <v-split></v-split>
         <div class="rating">
           <h1 class="title">商品评价</h1>
-          <v-ratingselect :ratings="food.ratings"></v-ratingselect>
+          <v-ratingselect :ratings="food.ratings" :desc="desc" :selectType="selectType"
+                          @showType="needShow"></v-ratingselect>
           <div class="rating-wrapper">
             <ul v-show="food.ratings && food.ratings.length">
-              <li v-show="needShow" class="rating-list" v-for="rating in food.ratings">
+              <li v-show="selectType === rating.rateType || selectType === 2" class="rating-list"
+                  v-for="rating in food.ratings">
                 <div class="user">
-                  <span>{{rating.username}}</span>
+                  <span class="name">{{rating.username}}</span>
                   <img :src="rating.avatar">
                 </div>
                 <div class="time">
@@ -41,7 +44,7 @@
                 </div>
                 <div class="text">
                   <i
-                    :class="{ 'icon-thumb_down' : rating.rateType === 1 , 'icon-thumb_up': rating.rateType === 0 }"></i>
+                    :class="{ 'icon-thumb_down' : rating.rateType === 0 , 'icon-thumb_up': rating.rateType === 1 }"></i>
                   {{rating.text}}
                 </div>
               </li>
@@ -59,10 +62,18 @@
   import split from 'components/split/split.vue';
   import ratingselect from 'components/ratingselect/ratingselect.vue';
   import BScroll from 'better-scroll';
+  import Vue from 'vue';
+
   export default{
     data () {
       return {
-        showFlag: false
+        showFlag: false,
+        selectType: 2,
+        desc: {
+          all: '全部',
+          positive: '推荐',
+          negative: '吐槽'
+        }
       };
     },
     props: {
@@ -73,6 +84,7 @@
     methods: {
       show () {
         this.showFlag = true;
+        this.selectType = 2;
         this.$nextTick(() => {
           this.scroll = new BScroll(this.$refs.food, {
             click: true
@@ -95,8 +107,22 @@
         m = m < 10 ? '0' + m : m;
         return y + '-' + M + '-' + d + ' ' + h + ':' + m;
       },
-      needShow () {
-
+//      子组件触发
+      needShow (type) {
+        this.selectType = type;
+        this.$nextTick(() => {
+          this.scroll.refresh();
+        });
+      },
+      addCart (e) {
+        if (!this.food.count) {
+          Vue.set(this.food, 'count', 1);
+        } else {
+          this.food.count++;
+        }
+      },
+      drop (target) {
+        this.$emit('foodTarget', target);
       }
     },
     components: {
@@ -173,7 +199,17 @@
             font-weight: 400
             color: rgb(147, 153, 159)
             text-decoration: line-through
-
+          .cartControl-wrapper
+            position: absolute
+            right: 18px
+            bottom: 18px
+            .btn
+              line-height: 12px
+              padding: 6px 12px
+              border-radius: 12px
+              background: rgb(0, 160, 220)
+              color: #fff
+              font-size: 10px
         .text
           padding: 0 8px
           line-height: 24px
@@ -199,7 +235,10 @@
               overflow: hidden
               .user
                 float: right
+                .name
+                  vertical-align: top
                 img
+                  vertical-align: top
                   width: 12px;
                   height: 12px
                   margin-left: 6px

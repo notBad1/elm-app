@@ -27,7 +27,7 @@
                 <div class="price">
                   <span class="now">￥{{food.price}}</span>
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
-                  <div class=cartControl-wrapper>
+                  <div class='cartControl-wrapper'>
                     <v-cartControl :food="food" @target="drop"></v-cartControl>
                   </div>
                 </div>
@@ -41,7 +41,7 @@
     <v-shopCart ref="shopCart" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"
                 :selectFoods="selectFoods"></v-shopCart>
 
-    <v-food :food="selectedFood" ref="food"></v-food>
+    <v-food :food="selectedFood" ref="food" @foodTarget="drop"></v-food>
   </div>
 </template>
 <script type="text/ecmascript-6">

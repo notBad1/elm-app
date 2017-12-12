@@ -1,9 +1,12 @@
 <template>
   <div class="ratingselect">
     <div class="rating-type">
-      <span @click="select(2,$event)" class="all">{{desc.all}} <span class="count">{{ratings && ratings.length}}</span></span>
-      <span @click="select(1,$event)" class="positive">{{desc.positive}} <span class="count">{{positives.length}}</span></span>
-      <span @click="select(0,$event)" class="negative">{{desc.negative}} <span class="count">{{negatives.length}}</span></span>
+      <span @click="select(2,$event)" class="all" :class="{'active': selectType === 2}">{{desc.all}} <span
+        class="count">{{ratings && ratings.length}}</span></span>
+      <span @click="select(1,$event)" class="positive" :class="{'active': selectType === 1}">{{desc.positive}} <span
+        class="count">{{positives.length}}</span></span>
+      <span @click="select(0,$event)" class="negative" :class="{'active': selectType === 0}">{{desc.negative}} <span
+        class="count">{{negatives.length}}</span></span>
     </div>
     <div class="swith">
       <i class="icon-check_circle"></i>
@@ -15,7 +18,8 @@
 <script type="text/ecmascript-6">
   const POSITIVE = 1;
   const NEGATIVE = 0;
-//  const ALL = 2;
+  const ALL = 2;
+
   export default{
     props: {
       ratings: {
@@ -26,10 +30,14 @@
         default () {
           return {
             all: '全部',
-            positive: '推荐',
-            negative: '吐槽'
+            positive: '满意',
+            negative: '不满意'
           };
         }
+      },
+      selectType: {
+        type: Number,
+        default: ALL
       }
     },
     computed: {
@@ -57,8 +65,8 @@
       }
     },
     methods: {
-      select (type, $event) {
-
+      select (type, e) {
+        this.$emit('showType', type);
       }
     }
   };
@@ -79,12 +87,12 @@
         border-radius: 2px
         font-size: 12px
         color: rgb(77, 85, 93)
+        &.active
+          background-color: rgb(0, 160, 220)
+          color: #fff
         .count
           font-size: 8px
-      .all
-        background-color: rgb(0, 160, 220)
-        color: #fff
-      .positive
+      .all, .positive
         background-color: rgba(0, 160, 220, .2)
       .negative
         background-color: rgba(77, 85, 93, .2)
