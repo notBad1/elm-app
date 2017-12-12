@@ -13,7 +13,7 @@
         <li v-for="(item, i) in goods" class="food-list food-list-hook" :key="i">
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li v-for="food in item.foods" class="food-item">
+            <li v-for="food in item.foods" class="food-item" @click="selectFood(food,$event)">
               <div class="icon">
                 <img width="57" height="57" :src="food.icon" alt="">
               </div>
@@ -41,7 +41,7 @@
     <v-shopCart ref="shopCart" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"
                 :selectFoods="selectFoods"></v-shopCart>
 
-    <v-food :food="food"></v-food>
+    <v-food :food="selectedFood" ref="food"></v-food>
   </div>
 </template>
 <script type="text/ecmascript-6">
@@ -67,7 +67,8 @@
       return {
         goods: [], //  商品数据
         listHeight: [], // 右侧区块到顶部高度的数组
-        scrollY: 0  // 滚动的高度
+        scrollY: 0, // 滚动的高度
+        selectedFood: {}
       };
     },
     components: {
@@ -140,6 +141,10 @@
 //      子组件事件触发
       drop (target) {
         this.$refs.shopCart.drop(target);
+      },
+      selectFood (food, $event) {
+        this.selectedFood = food;
+        this.$refs.food.show();
       }
     },
     created: function () {
